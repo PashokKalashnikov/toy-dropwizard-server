@@ -1,0 +1,36 @@
+name: continious integration
+
+# Specifies on which git command the jobs are run
+on:
+  push:
+    branches:
+      main
+
+# Specifies what to do when the action is triggered in on:
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ???
+      - uses: actions/checkout@v1
+
+      # Installs Java on the virtual machine
+      - name: Install Java
+        uses: actions/setup-java
+        with:
+          java-version: "11"
+
+      # Builds the project with gradle. | stands for piping, chmod +x changes the write access of gradlew. -x test doesn't run the test
+      - name: Build with gradle
+        working-directory: .
+        run: |
+          cmhod +x gradlew
+          ./gradlew build -x test
+      
+      # Runs the test
+      - name: Run tests
+        working-directory: .
+        run: |
+          chmod +x gradlew
+          ./gradlew test
